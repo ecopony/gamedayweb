@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/ecopony/gamedayapi"
+	"bytes"
 	"log"
 	"net/http"
 	"path"
@@ -24,8 +25,21 @@ func main() {
 func serveGame(w http.ResponseWriter, r *http.Request) {
 	date, _ := time.Parse("2006-01-02", "2014-06-22")
 	game, _ := gamedayapi.GameFor("sea", date)
+	var buffer bytes.Buffer
+	buffer.WriteString(`{ "game": `)
 	gameJson, _ := json.Marshal(game)
-	fmt.Fprintln(w, string(gameJson))
+	boxscoreJson, _ := json.Marshal(game.Boxscore())
+	linescoreJson, _ := json.Marshal(game.Boxscore().Linescores)
+	hitchartJson, _ := json.Marshal(game.HitChart())
+	buffer.WriteString(string(gameJson))
+	buffer.WriteString(`, "boxscore": `)
+	buffer.WriteString(string(boxscoreJson))
+	buffer.WriteString(`, "linescore": `)
+	buffer.WriteString(string(linescoreJson))
+	buffer.WriteString(`, "hitchart": `)
+	buffer.WriteString(string(hitchartJson))
+	buffer.WriteString("}")
+	fmt.Fprintln(w, buffer.String())
 }
 
 func serveTemplate(w http.ResponseWriter, r *http.Request) {

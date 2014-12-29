@@ -34,14 +34,19 @@ var GameForm = React.createClass({
 
 var GameBoxscore = React.createClass({
     render: function() {
-        var game = this.props.data;
-        return (
-            <div className="gameBoxscore">
-                <h2>{game.AwayTeamName} at {game.HomeTeamName}</h2>
-                <h3>{game.Venue} - {game.Status}</h3>
-                <p>{game.Gameday}</p>
-            </div>
-            );
+        var data = this.props.data;
+        if (typeof data.game !== 'undefined') {
+            return (
+                <div className="gameBoxscore">
+                    <h2>{data.game.AwayTeamName} at {data.game.HomeTeamName}</h2>
+                    <h3>{data.game.Venue} - {data.game.Status}</h3>
+                    <p>{data.game.Gameday}</p>
+                    <p>{data.linescore.HomeTeamRuns}</p>
+                    <p>{data.linescore.AwayTeamRuns}</p>
+                </div>
+                );
+        }
+        return (<div/>);
     }
 });
 
