@@ -1,13 +1,24 @@
-
-var data = { Gameday: "gid_2014_06_04_seamlb_atlmlb_1" };
-
 var GameBox = React.createClass({
+    getInitialState: function() {
+        return { data: {} };
+    },
+    componentDidMount: function() {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function(data) {
+                this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
     render: function() {
         return (
             <div className="gameBox">
-                This is where the boxscore will go.
                 <GameForm/>
-                <GameBoxscore data={this.props.data}></GameBoxscore>
+                <GameBoxscore data={this.state.data}></GameBoxscore>
             </div>
         );
     }
@@ -16,25 +27,25 @@ var GameBox = React.createClass({
 var GameForm = React.createClass({
     render: function() {
         return (
-            <div className="gameForm">
-                This is where users will select a date and team.
-            </div>
+            <div className="gameForm"/>
         );
     }
 });
 
 var GameBoxscore = React.createClass({
     render: function() {
+        var game = this.props.data;
         return (
             <div className="gameBoxscore">
-                <h3>{this.props.data.Gameday}</h3>
-                {this.props.children}
+                <h2>{game.AwayTeamName} at {game.HomeTeamName}</h2>
+                <h3>{game.Venue} - {game.Status}</h3>
+                <p>{game.Gameday}</p>
             </div>
             );
     }
 });
 
 React.render(
-    <GameBox data={data}/>,
+    <GameBox url="game" />,
     document.getElementById('content')
 );
