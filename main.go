@@ -29,7 +29,7 @@ func serveGame(w http.ResponseWriter, r *http.Request) {
 	buffer.WriteString(`{ "game": `)
 	gameJson, _ := json.Marshal(game)
 	boxscoreJson, _ := json.Marshal(game.Boxscore())
-	linescoreJson, _ := json.Marshal(game.Boxscore().Linescores)
+	linescoreJson, _ := json.Marshal(game.Boxscore().Linescore)
 	hitchartJson, _ := json.Marshal(game.HitChart())
 	buffer.WriteString(string(gameJson))
 	buffer.WriteString(`, "boxscore": `)
