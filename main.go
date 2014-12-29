@@ -20,9 +20,7 @@ func main() {
 
 func serveTemplate(w http.ResponseWriter, r *http.Request) {
 	teams := gamedayapi.TeamsForYear(2014)
-	lp := path.Join("templates", "layout.html")
 	fp := path.Join("templates", r.URL.Path)
-
-	tmpl, _ := template.ParseFiles(lp, fp)
-	tmpl.ExecuteTemplate(w, "layout", teams)
+	tmpl, _ := template.ParseFiles(fp)
+	tmpl.ExecuteTemplate(w, "index", teams)
 }
