@@ -27,7 +27,19 @@ var GameBox = React.createClass({
 var GameForm = React.createClass({
     render: function() {
         return (
-            <div className="gameForm"/>
+            <div className="gameForm">
+                <p>
+                    <label>Team code: </label>
+                    <input type="text" name="teamCode" size="3" maxLength="3" />
+                </p>
+                <p>
+                    <label>Date (yyyy-mm-dd): </label>
+                    <input type="text" name="teamCode" size="10" maxLength="10" />
+                </p>
+                <p>
+                    <input type="Submit" value="Get game" />
+                </p>
+            </div>
         );
     }
 });
