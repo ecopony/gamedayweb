@@ -14,10 +14,25 @@ var GameBox = React.createClass({
             }.bind(this)
         });
     },
+    handleGameFormSubmit: function(game) {
+        console.log(game);
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            type: 'GET',
+            success: function(data) {
+                console.log(data);
+                this.setState({data: data});
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
+    },
     render: function() {
         return (
             <div className="gameBox">
-                <GameForm/>
+                <GameForm onGameSubmit={this.handleGameFormSubmit} />
                 <GameBoxscore data={this.state.data}></GameBoxscore>
             </div>
         );
@@ -25,20 +40,32 @@ var GameBox = React.createClass({
 });
 
 var GameForm = React.createClass({
+    handleSubmit: function(e) {
+        e.preventDefault();
+        var teamCode = this.refs.teamCode.getDOMNode().value.trim();
+        var date = this.refs.date.getDOMNode().value.trim();
+        if (!teamCode || !date) {
+            return;
+        }
+        this.props.onGameSubmit({teamCode: teamCode, date: date});
+        return;
+    },
     render: function() {
         return (
             <div className="gameForm">
-                <p>
-                    <label>Team code: </label>
-                    <input type="text" name="teamCode" size="3" maxLength="3" />
-                </p>
-                <p>
-                    <label>Date (yyyy-mm-dd): </label>
-                    <input type="text" name="teamCode" size="10" maxLength="10" />
-                </p>
-                <p>
-                    <input type="Submit" value="Get game" />
-                </p>
+                <form className="commentForm" onSubmit={this.handleSubmit}>
+                    <p>
+                        <label>Team code: </label>
+                        <input type="text" ref="teamCode" size="3" maxLength="3" />
+                    </p>
+                    <p>
+                        <label>Date (yyyy-mm-dd): </label>
+                        <input type="text" ref="date" size="10" maxLength="10" />
+                    </p>
+                    <p>
+                        <input type="Submit" value="Get game" />
+                    </p>
+                </form>
             </div>
         );
     }
