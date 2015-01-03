@@ -20,6 +20,10 @@ var GameBox = React.createClass({
             url: this.props.url,
             dataType: 'json',
             type: 'GET',
+            data: {
+                teamCode: game.teamCode,
+                date: game.date
+            },
             success: function(data) {
                 console.log(data);
                 this.setState({data: data});

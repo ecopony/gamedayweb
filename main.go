@@ -23,8 +23,18 @@ func main() {
 }
 
 func serveGame(w http.ResponseWriter, r *http.Request) {
-	date, _ := time.Parse("2006-01-02", "2014-06-22")
-	game, _ := gamedayapi.GameFor("sea", date)
+	teamCode := r.FormValue("teamCode")
+	dateString := r.FormValue("date")
+
+	if len(teamCode) == 0 || len(dateString) == 0 {
+		// Need to do the response code thing...
+		fmt.Fprintln(w, "{}")
+	}
+
+	date, _ := time.Parse("2006-01-02", dateString)
+	// Need to handle bad date format and invalid team code
+
+	game, _ := gamedayapi.GameFor(teamCode, date)
 	var buffer bytes.Buffer
 	buffer.WriteString(`{ "game": `)
 	gameJson, _ := json.Marshal(game)
