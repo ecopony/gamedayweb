@@ -25,14 +25,12 @@ func main() {
 func serveGame(w http.ResponseWriter, r *http.Request) {
 	teamCode := r.FormValue("teamCode")
 	dateString := r.FormValue("date")
+	date, err := time.Parse("2006-01-02", dateString)
 
-	if len(teamCode) == 0 || len(dateString) == 0 {
-		// Need to do the response code thing...
-		fmt.Fprintln(w, "{}")
+	if len(teamCode) == 0 || len(dateString) == 0 || err != nil {
+		http.Error(w, "Three-character team code and date (yyyy-mm-dd) required", http.StatusBadRequest)
+		return
 	}
-
-	date, _ := time.Parse("2006-01-02", dateString)
-	// Need to handle bad date format and invalid team code
 
 	game, _ := gamedayapi.GameFor(teamCode, date)
 	var buffer bytes.Buffer
