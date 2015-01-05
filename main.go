@@ -32,7 +32,23 @@ func serveGame(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	game, _ := gamedayapi.GameFor(teamCode, date)
+	game, err := gamedayapi.GameFor(teamCode, date)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	fmt.Fprintln(w, gameJson(game))
+}
+
+func serveTemplate(w http.ResponseWriter, r *http.Request) {
+	teams := gamedayapi.TeamsForYear(2014)
+	fp := path.Join("templates", r.URL.Path)
+	tmpl, _ := template.ParseFiles(fp)
+	tmpl.ExecuteTemplate(w, "index", teams)
+}
+
+func gameJson(game *gamedayapi.Game) string {
 	var buffer bytes.Buffer
 	buffer.WriteString(`{ "game": `)
 	gameJson, _ := json.Marshal(game)
@@ -47,12 +63,5 @@ func serveGame(w http.ResponseWriter, r *http.Request) {
 	buffer.WriteString(`, "hitchart": `)
 	buffer.WriteString(string(hitchartJson))
 	buffer.WriteString("}")
-	fmt.Fprintln(w, buffer.String())
-}
-
-func serveTemplate(w http.ResponseWriter, r *http.Request) {
-	teams := gamedayapi.TeamsForYear(2014)
-	fp := path.Join("templates", r.URL.Path)
-	tmpl, _ := template.ParseFiles(fp)
-	tmpl.ExecuteTemplate(w, "index", teams)
+	return buffer.String()
 }
