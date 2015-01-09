@@ -30,6 +30,7 @@ var GameBox = React.createClass({
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
+                this.setState({data: "undefined"});
             }.bind(this)
         });
     },
@@ -86,6 +87,12 @@ var GameBoxscore = React.createClass({
                     <p>{data.game.Gameday}</p>
                     <p>{data.linescore.HomeTeamRuns}</p>
                     <p>{data.linescore.AwayTeamRuns}</p>
+                </div>
+                );
+        } else {
+            return (
+                <div>
+                    Please enter a team code and a date on which the team played.
                 </div>
                 );
         }
