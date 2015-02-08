@@ -1,7 +1,7 @@
 gamedayweb
 ==========
 
-=== Build and run
+### Build and run
 
 Simple go webapp that utilizes the gamedayapi. For now, just displays the teams for 2014. More to come.
 
@@ -12,7 +12,7 @@ Simple go webapp that utilizes the gamedayapi. For now, just displays the teams 
 
 Go to http://localhost:3000/index.html
 
-=== Or do the docker thing
+### Or do the docker thing
 
     cd gamedayweb
     docker build -t gamedayweb .
