@@ -15,6 +15,7 @@ import (
 func main() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
+	http.HandleFunc("/favicon.ico", serveFavicon)
 	http.HandleFunc("/game", serveGame)
 	http.HandleFunc("/", serveTemplate)
 
@@ -23,6 +24,7 @@ func main() {
 }
 
 func serveGame(w http.ResponseWriter, r *http.Request) {
+	log.Println("Serving game")
 	teamCode := r.FormValue("teamCode")
 	dateString := r.FormValue("date")
 	date, err := time.Parse("2006-01-02", dateString)
@@ -42,6 +44,7 @@ func serveGame(w http.ResponseWriter, r *http.Request) {
 }
 
 func serveTemplate(w http.ResponseWriter, r *http.Request) {
+	log.Println("Serving template")
 	teams := gamedayapi.TeamsForYear(2014)
 	fp := path.Join("templates", r.URL.Path)
 	tmpl, _ := template.ParseFiles(fp)
@@ -65,3 +68,5 @@ func gameJson(game *gamedayapi.Game) string {
 	buffer.WriteString("}")
 	return buffer.String()
 }
+
+func serveFavicon(w http.ResponseWriter, r *http.Request) {}

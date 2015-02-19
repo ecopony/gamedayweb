@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:1.3.3-onbuild
 
 ADD . /go/src/github.com/ecopony/gamedayweb
 
